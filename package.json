@@ -1,0 +1,17 @@
+{
+  "name": "synth",
+  "version": "1.0.0",
+  "description": "HTML based Simple Synthesizer.",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx tailwindcss -i ./src/css/input.css -o ./src/css/style.css --watch",
+    "build": "npx tailwindcss -i ./src/css/input.css -o ./src/css/style.css & echo Build Complete"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
