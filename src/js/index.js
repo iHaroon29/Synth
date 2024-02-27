@@ -1,6 +1,9 @@
 const toggle = document.querySelector('#toggle')
 const whiteKeyHolders = document.querySelectorAll('.whiteBtnHolder')
 const blackKeyHolders = document.querySelectorAll('.blackBtnHolder')
+const gainKnobHolder = document.querySelector('#gainKnob')
+const pannerSlider = document.querySelector('#panner')
+const canvas = document.getElementById('oscilloscope')
 
 const whiteKeys = [
   'q',
@@ -25,9 +28,11 @@ const combined = 'C,C#,D,D#,E,F,F#,G,G#,A,A#,B'
 
 const initialFrequence = 261.6256
 const initialOctave = 4
-const canvas = document.getElementById('oscilloscope')
+
 const canvasCtx = canvas.getContext('2d')
+
 const audioContext = new AudioContext()
+const panner = audioContext.createStereoPanner()
 const analyzer = audioContext.createAnalyser()
 
 const oscList = []
@@ -43,7 +48,8 @@ let initAnimationToggle = true
 let raf
 let j = 0
 
-mainGainNode.connect(audioContext.destination)
+mainGainNode.connect(panner)
+panner.connect(audioContext.destination)
 
 const initializeCanvas = () => {
   canvasCtx.fillStyle = 'black'
@@ -128,6 +134,14 @@ document.addEventListener('keyup', (e) => {
   oscList.splice(index, 1)
 })
 
+gainKnobHolder.addEventListener('input', (e) => {
+  mainGainNode.gain.value = +e.target.value
+})
+
+pannerSlider.addEventListener('input', (e) => {
+  panner.pan.value = e.target.value
+})
+
 const generateFrequence = (element) => {
   const octave = element.getAttribute('data-octave')
   const tone = element.getAttribute('data-tone')
@@ -144,18 +158,7 @@ const generateFrequence = (element) => {
 
 const playTone = (freq, key) => {
   const osc = audioContext.createOscillator()
-  osc.frequency.setValueAtTime(freq, audioContext.currentTime)
-  mainGainNode.gain.setValueAtTime(0, audioContext.currentTime)
-  mainGainNode.gain.linearRampToValueAtTime(
-    0.5,
-    audioContext.currentTime + 0.01
-  )
-  mainGainNode.gain.exponentialRampToValueAtTime(
-    0.01,
-    audioContext.currentTime + 0.3
-  )
   osc.connect(mainGainNode)
-  osc.connect(audioContext.destination)
   osc.frequency.value = freq
   oscList.push({ osc, key })
   osc.start()
@@ -168,10 +171,10 @@ const freqCalc = (n) => {
 const updateUI = (element, action) => {
   if (action === 'add') {
     element.setAttribute('data-active', true)
-    element.classList.add('scale-[0.99]')
+    element.classList.add('scale-y-[0.99]')
   } else {
     element.setAttribute('data-active', false)
-    element.classList.remove('scale-[0.99]')
+    element.classList.remove('scale-y-[0.99]')
   }
 }
 

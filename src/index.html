@@ -22,29 +22,43 @@
       </div>
       <div class="synthesizer bg-neutral-700 my-2 w-full h-fit">
         <div class="octave-holder flex p-2">
-          <!-- <div class="gain-div p-2 bg-white rounded shadow">
-              <label for="volume"
-                >Gain Current-:<span id="gainValue">0.5</span></label
-              >
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                id="volume"
-                name="volume"
-                value="0.5"
-              />
-            </div>
-            <div class="wave-holder p-2 bg-white rounded shadow">
-              <label for="wave-type"> Wave Type </label>
-              <select name="wave-type" id="waveType">
-                <option value="sine">Sine</option>
-                <option value="square">Square</option>
-                <option value="triangle">Triangle</option>
-                <option value="custom">Custom</option>
-              </select>
-            </div> -->
+          <div class="gain-div p-2 bg-white rounded shadow">
+            <label for="volume"
+              >Gain Current-:<span id="gainValue">0.5</span></label
+            >
+            <input
+              type="range"
+              class="input-knob bg-lime-700"
+              id="gainKnob"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0"
+            />
+          </div>
+          <div class="panner-div bg-white flex justify-between items-center">
+            <label for="panner">L</label>
+            <input
+              type="range"
+              id="panner"
+              class="input-slider"
+              list="pan-vals"
+              min="-1"
+              max="1"
+              value="0"
+              step="0.01"
+            />
+            <label for="panner">R</label>
+          </div>
+          <div class="wave-holder p-2 bg-white rounded shadow">
+            <label for="wave-type"> Wave Type </label>
+            <select name="wave-type" id="waveType">
+              <option value="sine">Sine</option>
+              <option value="square">Square</option>
+              <option value="triangle">Triangle</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
 
           <label
             class="relative flex justify-between items-center p-2 text-xl bg-white rounded"
@@ -53,7 +67,6 @@
               id="toggle"
               type="checkbox"
               class="absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md"
-              checked="false"
             />
             <span
               class="w-16 h-10 flex items-center flex-shrink-0 ml-4 p-1 bg-gray-300 rounded-full duration-300 ease-in-out peer-checked:bg-slate-700 after:w-8 after:h-8 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-6"
@@ -197,6 +210,6 @@
       </div>
     </div>
   </body>
-
+  <script src="./js/knob.js"></script>
   <script type="module" src="./js/index.js"></script>
 </html>
