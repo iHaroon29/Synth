@@ -1,9 +1,15 @@
+import animation from './animation.js'
+import constants from './constants.js'
+
+const { initialOctave } = constants
+const { offAnimation, onAnimation, initializeCanvas } = animation
+
 const toggle = document.querySelector('#toggle')
 const whiteKeyHolders = document.querySelectorAll('.whiteBtnHolder')
 const blackKeyHolders = document.querySelectorAll('.blackBtnHolder')
 const gainKnobHolder = document.querySelector('#gainKnob')
+const gainValue = document.querySelector('#gainValue')
 const pannerSlider = document.querySelector('#panner')
-const canvas = document.getElementById('oscilloscope')
 
 const whiteKeys = [
   'q',
@@ -26,49 +32,25 @@ const whiteTones = 'CDEFGABCDEFGAB'
 const blackTones = 'C#,D#,F#,G#,A#,C#,D#,F#,G#,A#'
 const combined = 'C,C#,D,D#,E,F,F#,G,G#,A,A#,B'
 
-const initialFrequence = 261.6256
-const initialOctave = 4
-
-const canvasCtx = canvas.getContext('2d')
-
 const audioContext = new AudioContext()
 const panner = audioContext.createStereoPanner()
 const analyzer = audioContext.createAnalyser()
+const mainGainNode = audioContext.createGain()
 
 const oscList = []
 
-const frequency = 0.005
-const amplitude = 50
-const speed = 0.05
-
 let start = false
-let phase = 0
-let mainGainNode = audioContext.createGain()
-let initAnimationToggle = true
-let raf
-let j = 0
+let signal = ''
 
 mainGainNode.connect(panner)
 panner.connect(audioContext.destination)
 
-const initializeCanvas = () => {
-  canvasCtx.fillStyle = 'black'
-  canvasCtx.clearRect(0, 0, 1000, 5000)
-  canvasCtx.fillRect(0, 0, 1000, 5000)
-}
-
-initializeCanvas()
-
 toggle.addEventListener('change', (e) => {
-  start = !start
-  if (start) {
-    raf = requestAnimationFrame(draw)
-    initAnimationToggle = true
+  const { checked } = e.target
+  if (checked) {
+    signal = 'on-animation'
   } else {
-    cancelAnimationFrame(raf)
-    initializeCanvas()
-    initAnimationToggle = false
-    j = 0
+    signal = 'off-animation'
   }
 })
 
@@ -94,7 +76,7 @@ blackKeyHolders.forEach((btn, index) => {
 
 document.addEventListener('keydown', (e) => {
   if (!start) return alert('Synth is off')
-  if (initAnimationToggle) initAnimationToggle = false
+  signal !== '' ? (signal = '') : null
   e.preventDefault()
   const indexWhite = [...whiteKeyHolders].findIndex(
     (node) => node.getAttribute('data-key') === e.key
@@ -135,6 +117,7 @@ document.addEventListener('keyup', (e) => {
 })
 
 gainKnobHolder.addEventListener('input', (e) => {
+  gainValue.innerText = Math.floor(+e.target.value * 100)
   mainGainNode.gain.value = +e.target.value
 })
 
@@ -197,33 +180,19 @@ const getOctaveInitValue = (octave) => {
   }
 }
 
-const onAnimationText = () => {
-  canvasCtx.font = '30px serif'
-  canvasCtx.fillStyle = 'red'
-  canvasCtx.fillRect(400, 20, 150, 70)
-  canvasCtx.fillStyle = 'white'
-  canvasCtx.fillText('Hello Synth', 800 / 2, 120 / 2)
-}
-
-const onAnimationWave = () => {
-  canvasCtx.fillStyle = 'rgba(255,0,0,0.4)'
-  for (let i = 0; i < 1000; i += 10) {
-    var y = 250 / 2 + Math.sin(i * frequency + phase) * amplitude
-    canvasCtx.fillRect(i, y, 3, 200 - y)
-  }
-}
-
-const onAnimation = () => {
-  onAnimationText()
-  onAnimationWave()
-}
-
 const draw = () => {
   initializeCanvas()
-  if (initAnimationToggle) {
-    onAnimation()
-    phase += speed
-  } else {
+  switch (signal) {
+    case 'on-animation':
+      onAnimation()
+      break
+    case 'off-animation':
+      offAnimation()
+      break
+    default:
+      break
   }
-  raf = requestAnimationFrame(draw)
+  requestAnimationFrame(draw)
 }
+
+draw()

@@ -597,6 +597,26 @@ video {
   margin-left: 75px;
 }
 
+.mr-5 {
+  margin-right: 1.25rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mr-4 {
+  margin-right: 1rem;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -702,6 +722,10 @@ video {
           appearance: none;
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
 .items-start {
   align-items: flex-start;
 }
@@ -716,6 +740,10 @@ video {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
 }
 
 .rounded {
