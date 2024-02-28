@@ -38,8 +38,6 @@ const analyzer = audioContext.createAnalyser()
 const mainGainNode = audioContext.createGain()
 
 const oscList = []
-
-let start = false
 let signal = ''
 
 mainGainNode.connect(panner)
@@ -50,7 +48,7 @@ toggle.addEventListener('change', (e) => {
   if (checked) {
     signal = 'on-animation'
   } else {
-    signal = 'off-animation'
+    signal = ''
   }
 })
 
@@ -75,7 +73,7 @@ blackKeyHolders.forEach((btn, index) => {
 })
 
 document.addEventListener('keydown', (e) => {
-  if (!start) return alert('Synth is off')
+  if (!toggle.checked) return alert('Synth is off')
   signal !== '' ? (signal = '') : null
   e.preventDefault()
   const indexWhite = [...whiteKeyHolders].findIndex(
@@ -185,9 +183,6 @@ const draw = () => {
   switch (signal) {
     case 'on-animation':
       onAnimation()
-      break
-    case 'off-animation':
-      offAnimation()
       break
     default:
       break
