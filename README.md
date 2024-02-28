@@ -11,7 +11,7 @@ This is a simple synthesizer built using HTML, TailwindCss, and JavaScript.
 
 ## Demo
 
-You can see a live demo [here](link_to_demo). - WIP
+You can see a live demo [[here](https://dev--synth-dev.netlify.app/)]
 
 ## Getting Started
 
